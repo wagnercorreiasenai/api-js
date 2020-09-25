@@ -1,20 +1,5 @@
 function exibirUsuarios(usuarios) {
-    var usuario = usuarios[0];
-
-    var elemCodigo = document.getElementById('codigo');
-    elemCodigo.innerHTML = usuario.codigo;
-
-    var elemNome = document.getElementById('nome');
-    elemNome.innerHTML = usuario.nome;
-
-    var elemEmail = document.getElementById('email');
-    elemEmail.innerHTML = usuario.email;
-
-    var elemLogin = document.getElementById('login');
-    elemLogin.innerHTML = usuario.login;
-
     popularTabela(usuarios);
-
 }
 
 function popularTabela(usuarios) {
@@ -41,3 +26,65 @@ function inserirLinhaTabela(usuario) {
     celLogin.innerHTML = usuario.login;
 
 }
+
+function validarUsuario(acao) {
+    var nome = document.getElementById('nome');
+    var email = document.getElementById('email');
+    var login = document.getElementById('login');
+    var senha  = document.getElementById('senha');
+    var senhaValidar = document.getElementById('senhaValidar');
+    
+    if (acao == "add") {
+        var dadosValidos = true;
+        
+        if (nome.value == "") {
+            dadosValidos = false;
+            alert("Preencha o campo nome");
+        } else if (email.value == "") {
+            dadosValidos = false;
+            alert("Informe um e-mail");
+        } else if (login.value == "") {
+            dadosValidos = false;
+            alert("Preencha o campo login");
+        } else {
+            
+            if(senha.value != "") {
+                if (senha.value == senhaValidar.value) {
+                    var senhaTxt = senha.value;                    
+                    if (senhaTxt.length < 6) {
+                        dadosValidos = false;
+                        alert("A senha precisa ter pelo menos 6 caracteres");
+                    }
+                } else {
+                  dadosValidos = false;
+                  alert("As senha informados não são iguais");  
+                }
+            } else {
+                dadosValidos = false;
+                alert("Informe a senha");
+            }
+            
+        }
+        
+        if (dadosValidos) {
+            //Enviar para a API
+            var objUsuario = {
+                "nome": nome.value,
+                "email": email.value,
+                "login": login.value,
+                "senha": senha.value
+            };
+            
+            //Adiciona o novo usuário
+            adicionarUsuario(objUsuario);
+            
+        }
+        
+    }
+    
+    return false;
+}
+
+window.onload = function () {
+    getUsuarios();
+};
